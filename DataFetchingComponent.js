@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 const DataFetchingComponent = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     fetch('https://jsonplaceholder.typicode.com/posts')
       .then(response => response.json())
@@ -16,7 +16,7 @@ const DataFetchingComponent = () => {
         setLoading(false);
       });
   }, []);
-  
+
   const memoizedData = useMemo(() => data, [data]);
 
   return (
