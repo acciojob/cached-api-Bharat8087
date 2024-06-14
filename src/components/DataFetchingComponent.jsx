@@ -9,14 +9,17 @@ const DataFetchingComponent = ({ userId }) => {
 
   const fetchData = async () => {
     try {
-      setLoading(true);
+      setLoading(true); // Set loading state to true before fetching data
       const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
       const result = await response.json();
-      setData(result);
+      setData(result); // Store fetched data in state
     } catch (err) {
-      setError(err);
+      setError(err); // Set error state if fetching fails
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading state to false after fetching is complete
     }
   };
 
