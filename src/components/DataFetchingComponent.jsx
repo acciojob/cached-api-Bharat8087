@@ -1,28 +1,29 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
+const API_URL = 'https://jsonplaceholder.typicode.com/posts';
+
 const DataFetchingComponent = ({ userId }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Fetch data from API based on userId
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
+    try {
       setLoading(true);
-      try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const response = await fetch(API_URL);
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, []);
 
-  // Memoize the filtered data based on userId
   const filteredData = useMemo(() => {
     return data.filter(item => item.userId === userId);
   }, [data, userId]);
@@ -31,14 +32,18 @@ const DataFetchingComponent = ({ userId }) => {
     return <div>Loading...</div>;
   }
 
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div>
-      <h1>Posts for User {userId}</h1>
+      <h1>Posts by User {userId}</h1>
       <ul>
-        {filteredData.map(item => (
-          <li key={item.id}>
-            <h2>{item.title}</h2>
-            <p>{item.body}</p>
+        {filteredData.map(post => (
+          <li key={post.id}>
+            <h2>{post.title}</h2>
+            <p>{post.body}</p>
           </li>
         ))}
       </ul>
