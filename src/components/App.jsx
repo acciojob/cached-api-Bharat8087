@@ -6,7 +6,6 @@ const App = () => {
   return (
     <div>
       <DataFetchingComponent userId={1} />
-      <DataFetchingComponent userId={2} />
     </div>
   );
 };
